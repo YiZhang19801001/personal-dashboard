@@ -1,15 +1,17 @@
 import React from 'react';
 
-import Card from './Card';
+import Card, { CardProps, CardType, CardSize } from './Card';
 
 import { render, screen } from '@testing-library/react';
 
-const defaultProps = {
-  withFooterButton: false,
+const defaultProps: CardProps = {
+  type: CardType.list,
+  size: CardSize.large,
+  hasFooter: false,
   onFooterButtonClick: () => {},
   contentItems: [],
   hasActionMenu: false,
-  title: '',
+  title: 'Jira Tasks',
 };
 
 describe('<Card />', () => {
@@ -17,6 +19,7 @@ describe('<Card />', () => {
     render(<Card {...defaultProps} />);
 
     expect(screen.getByTestId('card-title')).toBeInTheDocument();
+    expect(screen.getByText(defaultProps.title)).toBeInTheDocument();
   });
 
   test('should show action dot menu', () => {
@@ -31,9 +34,15 @@ describe('<Card />', () => {
     expect(screen.getByTestId('card-content-list')).toBeInTheDocument();
   });
 
-  test('should render the footer button', () => {
-    render(<Card {...defaultProps} withFooterButton={true} />);
+  test('should render the footer when hasFooter is true', () => {
+    render(<Card {...defaultProps} hasFooter />);
 
     expect(screen.getByTestId('card-footer-button')).toBeInTheDocument();
+  });
+
+  test('should not render the footer by default', () => {
+    render(<Card {...defaultProps} />);
+
+    expect(screen.queryByTestId('card-footer-button')).not.toBeInTheDocument();
   });
 });

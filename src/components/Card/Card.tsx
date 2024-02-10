@@ -1,21 +1,29 @@
 import React from 'react';
 
-type CardProps = {
+export enum CardType {
+  default = 'default',
+  list = 'list',
+}
+
+export enum CardSize {
+  small = 'small',
+  medium = 'medium',
+  large = 'large',
+}
+
+export type CardProps = {
+  type: CardType;
+  size: CardSize;
   title: string;
-  withFooterButton: boolean;
+  hasFooter: boolean;
   onFooterButtonClick: () => void;
   contentItems: Array<any>;
   hasActionMenu: boolean;
 };
 
 function Card(props: CardProps) {
-  const {
-    title,
-    withFooterButton,
-    onFooterButtonClick,
-    contentItems,
-    hasActionMenu,
-  } = props;
+  const { title, hasFooter, onFooterButtonClick, contentItems, hasActionMenu } =
+    props;
 
   return (
     <div>
@@ -24,9 +32,16 @@ function Card(props: CardProps) {
         <span data-testid="card-action-menu"></span>
       </header>
       <div data-testid="card-content-list"></div>
-      <footer>
-        <button data-testid="card-footer-button">View All</button>
-      </footer>
+      {hasFooter && (
+        <footer>
+          <button
+            data-testid="card-footer-button"
+            onClick={onFooterButtonClick}
+          >
+            View All
+          </button>
+        </footer>
+      )}
     </div>
   );
 }
